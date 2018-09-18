@@ -20,7 +20,11 @@ RUN apk add --update \
     php-pdo_odbc \
     php-pdo_mysql \
     php-pdo_sqlite \
-    php-opcache && \
+    php-opcache \
+    python \
+    py-pip \
+    && pip install Pygments \
+    && ln -s  /usr/bin/pygmentize  /bin/pygmentize && \
     sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Europe\/Berlin/g' /etc/php/php.ini && \
     curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer && \
@@ -32,7 +36,7 @@ RUN apk add --update \
     echo "extension=redis.so" >> /etc/php/conf.d/redis.ini && \
     rm -rf /tmp/* && \
     apk del --purge openssl-dev autoconf php-dev alpine-sdk && \
-    rm -rf /var/cache/apk/*
+    rm -rf /var/cache/apk/* 
 COPY Docker/php-fpm.conf /etc/php/php-fpm.conf
 ADD  . /var/www/
 WORKDIR /var/www
